@@ -2,7 +2,6 @@
  * Fasteer.js
  *
  * @license MIT
- * @author Froneb, s.r.o. <hello@froneb.dev>
  * @author Filip Vottus <vottus@vott.us>
  * @year 2020-2021
  */

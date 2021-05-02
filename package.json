@@ -3,23 +3,19 @@
   "version": "3.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "git@github.com:VottusCode/Fasteer.git",
+  "repository": "git@github.com:fasteerjs/fasteer.git",
   "keywords": [
     "fastify",
     "node",
     "cors",
     "helmet",
-    "less boilerplate",
     "framework"
   ],
-  "homepage": "https:/github.com/VottusCode/Fasteer#readme",
+  "homepage": "https:/github.com/fasteerjs/fasteer#readme",
   "bugs": {
-    "url": "https://github.com/VottusCode/Fasteer/issues"
+    "url": "https://github.com/fasteerjs/fasteer/issues"
   },
-  "author": {
-    "name": "Filip Vottus",
-    "email": "vottus@vott.us"
-  },
+  "author": "Mia (Filip Vottus) <vottus@vott.us>",
   "license": "MIT",
   "private": false,
   "dependencies": {
