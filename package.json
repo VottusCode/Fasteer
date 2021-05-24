@@ -20,6 +20,7 @@
   "private": false,
   "dependencies": {
     "chalk": "^4.1.0",
+    "eventemitter3": "^4.0.7",
     "fastify": "^3.8.0",
     "fastify-cors": "^5.0.0",
     "fastify-helmet": "^5.0.3",
@@ -27,7 +28,8 @@
     "helmet": "^4.2.0",
     "husky": "^5.0.8",
     "pinst": "^2.1.4",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "winston-transport": "^4.4.0"
   },
   "scripts": {
     "format": "prettier --write .",
@@ -35,7 +37,7 @@
     "compile": "tsc",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
-    "prepublish": "yarn format && yarn lint && yarn compile && yarn test",
+    "prepublish": "yarn format && yarn lint && yarn compile",
     "postpublish": "pinst --enable",
     "test": "tap tests/"
   },

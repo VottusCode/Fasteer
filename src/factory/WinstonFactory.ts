@@ -1,10 +1,14 @@
-import { createLogger, LoggerOptions, transports, format } from "winston"
-import chalk from "chalk"
+import { createLogger, LoggerOptions, transports, format } from "winston";
+import chalk from "chalk";
 
 /**
  * Factory for the Winston logger
+ * @deprecated Use createLogger
  */
 export class WinstonFactory {
+  /**
+   * @deprecated createLogger()
+   */
   static defaultConfig: LoggerOptions = {
     transports: [
       new transports.Console({
@@ -19,11 +23,14 @@ export class WinstonFactory {
         handleExceptions: true,
       }),
     ],
-  }
+  };
 
+  /**
+   * @deprecated createLogger()
+   */
   static create(options = WinstonFactory.defaultConfig) {
-    return createLogger(options)
+    return createLogger(options);
   }
 }
 
-export default WinstonFactory
+export default WinstonFactory;

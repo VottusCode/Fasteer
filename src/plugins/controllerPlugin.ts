@@ -1,10 +1,10 @@
-import { blueBright } from "chalk"
-import fp from "fastify-plugin"
-import glob from "glob"
+import { blueBright } from "chalk";
+import fp from "fastify-plugin";
+import glob from "glob";
 
-import path from "path"
-import { withFasteer } from "../helpers"
-import F from "../types/fasteer"
+import path from "path";
+import { withFasteer } from "../helpers";
+import F from "../types/fasteer";
 
 /**
  * RequireJS Compatibility helper
@@ -18,10 +18,10 @@ export const ctrl = (controller: F.FCtrl, routePrefix?: string) => ({
   default: controller,
   routePrefix,
   __requireModule: true as true,
-})
+});
 
 /**
- * UseController Hook
+ * Controller Plugin
  *
  * Registers all controller paths from given paths.
  * Under the hood it uses glob, so it can accept glob syntax as a path.
@@ -30,7 +30,7 @@ export const ctrl = (controller: F.FCtrl, routePrefix?: string) => ({
  *  - http/controllers/UserController.ts
  *  - http/controllers/*Controller.ts
  */
-export const useControllers = fp(
+const controllerPlugin = fp(
   async (
     fastify,
     {
@@ -40,7 +40,7 @@ export const useControllers = fp(
       injected = {},
     }: F.UseControllers
   ) => {
-    controllers = !(controllers instanceof Array) ? [controllers] : controllers
+    controllers = !(controllers instanceof Array) ? [controllers] : controllers;
 
     const registerController = async (
       ctrl: F.ControllerImport,
@@ -52,8 +52,10 @@ export const useControllers = fp(
        * know that this is a RequireJS export and to use it accordingly.
        */
       if (ctrl.__requireModule) {
-        ctrl = Object.assign({}, ctrl)
-        ctrl.default = (ctrl as any).default.default
+        // The object is frozen so it can't be overwritten
+        // that's why a new one is created and assigned the original values
+        ctrl = Object.assign({}, ctrl);
+        ctrl.default = (ctrl as any).default.default;
       }
 
       /**
@@ -65,8 +67,8 @@ export const useControllers = fp(
           log(
             `Controller ${name} does not have a default export or it is not a function. Skipping...`
           )
-        )
-        return
+        );
+        return;
       }
 
       /**
@@ -78,7 +80,7 @@ export const useControllers = fp(
         prefix: path.join(globalPrefix, ctrl.routePrefix ?? ""),
         ctx: context,
         ...injected,
-      } as any)
+      } as any);
 
       console.log(
         log(
@@ -88,22 +90,22 @@ export const useControllers = fp(
               : ""
           }registered`
         )
-      )
-    }
+      );
+    };
 
     const log = (...log: any[]) =>
-      withFasteer(blueBright("[useControllers]"), ...log)
+      withFasteer(blueBright("[useControllers]"), ...log);
 
-    let allControllers: (F.ControllerImport | string)[] = []
+    let allControllers: (F.ControllerImport | string)[] = [];
 
     for (const controller of controllers) {
       if (typeof controller !== "string") {
-        allControllers.push(controller)
-        continue
+        allControllers.push(controller);
+        continue;
       }
 
-      console.info(log("Looking up path", controller))
-      allControllers = [...allControllers, ...glob.sync(controller)]
+      console.info(log("Looking up path", controller));
+      allControllers = [...allControllers, ...glob.sync(controller)];
     }
     /**
      * Fasteer imports the controller file using ES6 imports.
@@ -118,19 +120,22 @@ export const useControllers = fp(
           ? (controller.default as any).controllerName
           : controller.default.name === ""
           ? "(anonymous controller)"
-          : controller.default.name
+          : controller.default.name;
 
         if (controller.__requireModule) {
-          delete controller.__requireModule
+          delete controller.__requireModule;
         }
 
-        await registerController(controller, name)
-        continue
+        await registerController(controller, name);
+        continue;
       }
       await registerController(
         await import(controller),
         path.parse(controller).name
-      )
+      );
     }
   }
-)
+);
+
+export { controllerPlugin };
+export default controllerPlugin;

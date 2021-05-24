@@ -10,10 +10,11 @@ export interface Context {}
 
 export interface Injected {}
 
-export * from "./FasteerInstance"
-export * from "./hooks/useControllers"
-export * from "./hooks/useWinston"
-export * from "./init/hookFastify"
-export * from "./types/fasteer"
-export * from "./factory/FasteerFactory"
-export * from "./factory/WinstonFactory"
+export * from "./FasteerInstance";
+export * from "./plugins/controllerPlugin";
+export * from "./plugins/winstonPlugin";
+export * from "./logger";
+export * from "./createFasteer";
+export * from "./types/fasteer";
+export * from "./factory/FasteerFactory";
+export * from "./factory/WinstonFactory";
