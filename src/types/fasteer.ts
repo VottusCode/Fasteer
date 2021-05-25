@@ -124,7 +124,7 @@ export namespace Fasteer {
     filterKeys?: { [key: string]: string[] };
   }
 
-  interface CreateLoggerOptions {
+  export interface CreateLoggerOptions {
     winstonOptions?: LoggerOptions;
     fileLogging?: {
       /**
