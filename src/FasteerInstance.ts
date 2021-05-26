@@ -1,6 +1,6 @@
 import EventEmitter from "eventemitter3";
 import { FastifyInstance } from "fastify";
-import { Logger } from "winston";
+import { Logger, LoggerOptions } from "winston";
 import { withFasteer } from "./helpers";
 import controllerPlugin from "./plugins/controllerPlugin";
 import Fasteer from "./types/fasteer";
@@ -10,9 +10,16 @@ export class FasteerInstance<
 > extends EventEmitter {
   public logger: Logger;
 
-  private _config: Fasteer.Config;
+  /**
+   * The compiled Winston logger options, in case
+   * you need them for your own instance.
+   */
+  public readonly loggerConfig: LoggerOptions;
+
+  private readonly _config: Fasteer.Config;
 
   private _controllerContext: { [key: string]: unknown } = {};
+
   private _plugins: ((fasteer: this) => any)[] = [];
 
   private _injected: { [key: string]: any } = {};
@@ -21,10 +28,11 @@ export class FasteerInstance<
 
   constructor(
     public fastify: TFastify,
-    { config, logger }: Fasteer.ConstructorOptions
+    { config, logger, loggerConfig }: Fasteer.ConstructorOptions
   ) {
     super();
     this.logger = logger;
+    this.loggerConfig = loggerConfig;
     this._config = config;
     this._controllerContext = config.controllerContext ?? {};
 

@@ -71,7 +71,6 @@ export namespace Fasteer {
     development?: boolean;
     port: number | string;
     host?: string;
-    logger?: Logger;
     loggerOptions?: CreateLoggerOptions; // ignored when logger is present
     logRequests?: "file" | "all";
     logErrors?: false; // deprecated, included in debug
@@ -101,6 +100,7 @@ export namespace Fasteer {
   export interface ConstructorOptions {
     config: Config;
     logger: Logger;
+    loggerConfig: LoggerOptions;
   }
 
   /**
@@ -147,7 +147,7 @@ export namespace Fasteer {
      * Custom transports
      * Merges with
      */
-    transports: LoggerOptions["transports"];
+    transports?: LoggerOptions["transports"];
     json?: {
       filterKeys?: { [key: string]: string[] };
     };

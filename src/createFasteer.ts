@@ -6,6 +6,7 @@ import winstonPlugin from "./plugins/winstonPlugin";
 import { withFasteer } from "./helpers";
 import FasteerInstance from "./FasteerInstance";
 import { createLogger } from "winston";
+import { createLoggerOptions } from "./logger";
 
 export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
   const {
@@ -13,10 +14,19 @@ export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
     helmet = false,
     errorHandler,
     development = false,
-    logger = createLogger(config.loggerOptions),
     logRequests,
     debug = config.debug ?? config.development ?? false,
   } = config;
+
+  const loggerConfig = createLoggerOptions(
+    config.loggerOptions ?? {
+      consoleLogging: {
+        logErrors: development,
+      },
+    }
+  );
+
+  const logger = createLogger(loggerConfig);
 
   if (!app) app = fastify();
 
@@ -36,7 +46,11 @@ export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
     app.register(winstonPlugin, { winston: logger });
   }
 
-  const fasteerInstance = new FasteerInstance(app, { config, logger });
+  const fasteerInstance = new FasteerInstance(app, {
+    config,
+    logger,
+    loggerConfig,
+  });
 
   app.setErrorHandler(
     errorHandler
