@@ -6,7 +6,7 @@ import winstonPlugin from "./plugins/winstonPlugin";
 import { withFasteer } from "./helpers";
 import FasteerInstance from "./FasteerInstance";
 import { createLogger } from "winston";
-import { createLoggerOptions } from "./logger";
+import { createLoggerOptions, hookLoggerToEmitter } from "./logger";
 
 export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
   const {
@@ -16,6 +16,7 @@ export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
     development = false,
     logRequests,
     debug = config.debug ?? config.development ?? false,
+    logEmits,
   } = config;
 
   const loggerConfig = createLoggerOptions(
@@ -51,6 +52,10 @@ export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
     logger,
     loggerConfig,
   });
+
+  if (logEmits) {
+    hookLoggerToEmitter(fasteerInstance, logEmits);
+  }
 
   app.setErrorHandler(
     errorHandler

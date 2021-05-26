@@ -74,6 +74,7 @@ export namespace Fasteer {
     loggerOptions?: CreateLoggerOptions; // ignored when logger is present
     logRequests?: "file" | "all";
     logErrors?: false; // deprecated, included in debug
+    logEmits?: string[];
     debug?: boolean; // by default = development
   }
 

@@ -18,3 +18,4 @@ export * from "./createFasteer";
 export * from "./types/fasteer";
 export * from "./factory/FasteerFactory";
 export * from "./factory/WinstonFactory";
+export * from "./utils/token";

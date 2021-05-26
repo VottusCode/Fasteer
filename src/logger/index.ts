@@ -1,4 +1,5 @@
-import { gray } from "chalk";
+import { cyanBright, gray } from "chalk";
+import EventEmitter from "eventemitter3";
 import winston from "winston";
 import Fasteer from "../types/fasteer";
 
@@ -73,6 +74,22 @@ const createLogger = (opts: Fasteer.CreateLoggerOptions) => {
   return winston.createLogger(createLoggerOptions(opts));
 };
 
-export { createLogger, createLoggerOptions };
+const hookLoggerToEmitter = (emitter: EventEmitter, events: string[]) => (
+  app: Fasteer.Fasteer
+): void => {
+  for (const event in events) {
+    emitter.on(event, data => {
+      app.logger.info(
+        cyanBright(
+          `[Emit] [${event}] ${
+            typeof data === "object" ? JSON.stringify(data) : data
+          }`
+        )
+      );
+    });
+  }
+};
+
+export { createLogger, createLoggerOptions, hookLoggerToEmitter };
 
 export default createLogger;
