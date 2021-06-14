@@ -16,12 +16,13 @@ import {
  */
 const winstonPlugin = fp(
   async (fastify, { filterKeys = {}, winston }: F.UseWinston) => {
-    console.log(
-      withFasteer(
-        blueBright("[useWinston]"),
-        "Registering a onSend hook for logging"
-      )
-    );
+    if (fastify.fasteer.isDebug())
+      console.log(
+        withFasteer(
+          blueBright("[useWinston]"),
+          "Registering a onSend hook for logging"
+        )
+      );
     fastify.addHook("onSend", async (req, res, payload: string | object) => {
       winston.info(
         gray(

@@ -40,6 +40,9 @@ const controllerPlugin = fp(
       injected = {},
     }: F.UseControllers
   ) => {
+    const logger = fastify.fasteer.logger;
+    const isDebug = fastify.fasteer.isDebug();
+
     controllers = !(controllers instanceof Array) ? [controllers] : controllers;
 
     const registerController = async (
@@ -63,11 +66,12 @@ const controllerPlugin = fp(
        *  async (fastify: FastifyInstance) => any
        */
       if (!ctrl.default || typeof ctrl.default !== "function") {
-        console.warn(
-          log(
-            `Controller ${name} does not have a default export or it is not a function. Skipping...`
-          )
-        );
+        if (isDebug)
+          logger.warn(
+            log(
+              `Controller ${name} does not have a default export or it is not a function. Skipping...`
+            )
+          );
         return;
       }
 
@@ -82,15 +86,16 @@ const controllerPlugin = fp(
         ...injected,
       } as any);
 
-      console.log(
-        log(
-          `${name} ${
-            ctrl.routePrefix
-              ? `(${path.join(globalPrefix, ctrl.routePrefix ?? "")}) `
-              : ""
-          }registered`
-        )
-      );
+      if (isDebug)
+        logger.info(
+          log(
+            `${name} ${
+              ctrl.routePrefix
+                ? `(${path.join(globalPrefix, ctrl.routePrefix ?? "")}) `
+                : ""
+            }registered`
+          )
+        );
     };
 
     const log = (...log: any[]) =>
@@ -104,7 +109,7 @@ const controllerPlugin = fp(
         continue;
       }
 
-      console.info(log("Looking up path", controller));
+      if (isDebug) logger.info(log("Looking up path", controller));
       allControllers = [...allControllers, ...glob.sync(controller)];
     }
     /**

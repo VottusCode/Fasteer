@@ -36,7 +36,8 @@ export class FasteerInstance<
     this._config = config;
     this._controllerContext = config.controllerContext ?? {};
 
-    console.log(withFasteer("Created Fasteer Instance"));
+    if (this._config.debug)
+      this.logger.info(withFasteer("Created Fasteer Instance"));
   }
 
   private initControllers() {
@@ -171,6 +172,10 @@ export class FasteerInstance<
 
   public getLogger() {
     return this.logger;
+  }
+
+  public isDebug() {
+    return !!this._config.debug;
   }
 }
 

@@ -12,6 +12,12 @@ import FasteerInstance from "../FasteerInstance";
 
 export type FastifyHelmetOptions = Parameters<typeof helmet>[0];
 
+declare module "fastify" {
+  interface FastifyInstance {
+    fasteer: FasteerInstance;
+  }
+}
+
 /**
  * Fasteer Typings
  */
