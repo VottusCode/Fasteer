@@ -40,7 +40,10 @@ export const createFasteer = (config: Fasteer.Config, app = fastify()) => {
   if (helmet) {
     // As with cors, can be both a boolean (= enable plugin with default options)
     // or the actual plugin options.
-    app.register(fastifyHelmet, typeof helmet !== "boolean" ? helmet : {});
+    typeof helmet === "boolean"
+      ? app.register(fastifyHelmet)
+      : // TODO: fix any
+        app.register(fastifyHelmet, helmet as any);
   }
 
   if (logRequests) {

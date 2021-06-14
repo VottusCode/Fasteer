@@ -10,7 +10,9 @@ import { format, Logger, LoggerOptions } from "winston";
 import { Context, Injected } from "..";
 import FasteerInstance from "../FasteerInstance";
 
-export type FastifyHelmetOptions = Parameters<typeof helmet>[0];
+export type FastifyHelmetOptions = Parameters<typeof helmet>[0] & {
+  enableCSPNonces?: boolean;
+};
 
 declare module "fastify" {
   interface FastifyInstance {
