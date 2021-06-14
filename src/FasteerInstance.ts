@@ -36,6 +36,8 @@ export class FasteerInstance<
     this._config = config;
     this._controllerContext = config.controllerContext ?? {};
 
+    fastify.decorate("fasteer", this);
+
     if (this._config.debug)
       this.logger.info(withFasteer("Created Fasteer Instance"));
   }
