@@ -59,28 +59,29 @@ export class FasteerInstance<
     return this;
   }
 
-  async start() {
+  async start(listen = true) {
     if (this._started) {
-      throw new Error("Fasteer has already started.");
+      throw new Error("Fasteer has already been loaded.");
     }
 
     this.initControllers();
     await this.initPlugins();
 
     this.emit("beforeStart");
-
-    const addr = await this.fastify.listen(
-      this._config.port,
-      this._config.host
-    );
+    
+    if (listen)
+      const addr = await this.fastify.listen(
+        this._config.port,
+        this._config.host
+      );
 
     this.emit("afterStart");
 
     this._started = true;
 
-    return addr;
+    return this;
   }
-
+  
   public debug() {
     return this._config.debug ?? false;
   }
