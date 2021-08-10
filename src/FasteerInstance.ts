@@ -36,7 +36,11 @@ export class FasteerInstance<
     this._config = config;
     this._controllerContext = config.controllerContext ?? {};
 
-    fastify.decorate("fasteer", this);
+    this.init();
+  }
+
+  init() {
+    this.fastify.decorate("fasteer", this as unknown);
 
     if (this._config.debug)
       this.logger.info(withFasteer("Created Fasteer Instance"));
@@ -68,12 +72,10 @@ export class FasteerInstance<
     await this.initPlugins();
 
     this.emit("beforeStart");
-    
-    if (listen)
-      const addr = await this.fastify.listen(
-        this._config.port,
-        this._config.host
-      );
+
+    if (listen) {
+      await this.fastify.listen(this._config.port, this._config.host);
+    }
 
     this.emit("afterStart");
 
@@ -81,7 +83,7 @@ export class FasteerInstance<
 
     return this;
   }
-  
+
   public debug() {
     return this._config.debug ?? false;
   }
